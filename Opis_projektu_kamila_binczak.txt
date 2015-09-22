@@ -1,0 +1,56 @@
+//tworzone s¹ najpierw dane i nadawane im s¹ wartoœci
+// dane x, y, wielkoœæ promienia okrêgu 40, prêdkoœæ i prêdkoœæ pozioma, przyspieszenie ruchu okrêgu 0.04, a tak¿e zmienne boolean odpowiedzialne za ruch do przodu i w dó³ 
+float x;
+float y;
+int circleRadius = 40; 
+float velocity = 0.2;
+float acceleration = 0.04;
+float horizontalVelocity = 1;
+boolean moveForward = false;
+boolean moveDown = true;
+
+// metoda setup otwiera okno o rozmiarze 700 na 480 i utworzonym wczeœniej danym x i y przypisuje jednakowe wartoœci, i iloœæ wyœwietlanych klatek 120 
+// dzieje siê to w ci¹g³ej pêtli
+void setup() {
+  size(700, 480);
+  x = circleRadius;
+  y = circleRadius;  
+  loop();
+  frameRate(120);
+}
+
+// metoda draw rysuje okr¹g o równych wspó³rzêdnych x i y i okreœlonym promieniu
+void draw() { 
+  background(0);
+  ellipse(x, y, circleRadius, circleRadius);
+  
+// warunek który okreœla ruch okrêgu w dó³ i do przodu
+// dopóki moveDown ma wartoœæ true czyli ustalon¹ kulka siê porusza
+  if(moveDown){
+    y += velocity;
+    velocity += acceleration;
+  } else {    
+    y -= velocity;
+    velocity -= acceleration;
+  }    
+// je¿eli wysokoœæ odbicia bêdzie mniejsza od promienia, moveDown otrzyma wartoœæ false i ruch bêdzie w odwrotnym kierunku do góry a¿ siê skoñczy
+// w trakcie ruchu nadawany jest losowo kolor
+  if(y >= height-circleRadius){
+    moveDown = false;
+    moveForward = true;
+    velocity *= 0.8;
+    fill(random(255), random(255), random(255));
+  }
+ // jeœli wartoœæ velocity (prêdkoœæ) spadnie do zera ruch ustanie i zacznie spadaæ 
+  if(velocity <= 0.0){
+    moveDown = true;
+  }
+// ruch w poziomie trwa dot¹d a¿ obie wartosci s¹ wiêksze od zera 
+  if(moveForward && horizontalVelocity > 0)
+    x += horizontalVelocity;
+   // nadanie wartœci krokowi prêdkoœci
+  horizontalVelocity -= 0.0007;
+  // zatrzymanie pêtli jeœli prêdkoœæ spadnie do zera
+  if(horizontalVelocity <= 0)
+    noLoop();
+}
